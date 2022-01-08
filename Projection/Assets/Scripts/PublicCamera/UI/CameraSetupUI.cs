@@ -23,11 +23,7 @@ public class CameraSetupUI : MonoBehaviour
     {
         Hide();
 
-        //IFScreenHeight.characterValidation = InputField.CharacterValidation.Decimal;
-        //
-        //IFViewerOffsetX.characterValidation = InputField.CharacterValidation.Decimal;
-        //IFViewerOffsetY.characterValidation = InputField.CharacterValidation.Decimal;
-        //IFViewerOffsetZ.characterValidation = InputField.CharacterValidation.Decimal;
+        
     }
 
     public void Show()
@@ -118,7 +114,7 @@ public class CameraSetupUI : MonoBehaviour
         
         float result;
         float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
-        //float.Parse(str, NumberStyles.Any, CultureInfo.InvariantCulture);
+        
         return result;
         
     }
