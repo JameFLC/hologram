@@ -16,8 +16,9 @@ public class Cameramap : MonoBehaviour
     Vector3 posCache_;
     Quaternion rotCache_ = Quaternion.identity;
     RenderTexture tmp_;
-    float screenSize;
+    float renderTextureSize;
     float ScreenSize = Screen.width * Screen.height;
+    float currentScreenSize = Screen.width * Screen.height;
     #endregion
 
 
@@ -26,7 +27,7 @@ public class Cameramap : MonoBehaviour
         cam_ = GetComponent<Camera>();
         matProjection_ = new Material(proj);
         ScreenRenderer = VirtualScreen.GetComponent<Renderer>();
-        screenSize = Screen.width * Screen.height;
+        
     }
     
     void OnRenderImage(RenderTexture src, RenderTexture dst)
@@ -38,13 +39,19 @@ public class Cameramap : MonoBehaviour
     
         
         var store_ = RenderTexture.active;
- 
-        float currentScreenSize = Screen.width * Screen.height;
-        // if texture is missing or window sze changed update rendter texture
-        if (tmp_ == null || ScreenSize != currentScreenSize) tmp_ = new RenderTexture((int)(Screen.width * RenderUpscale), (int)(Screen.height * RenderUpscale), 0) ;
-    
-    
-    
+
+
+        // if texture is missing or window sze changed update rendter texture 
+        // TODO : Buggy when window size change
+        if (tmp_ == null || renderTextureSize != currentScreenSize)
+        {
+            tmp_ = new RenderTexture((int)(Screen.width * RenderUpscale), (int)(Screen.height * RenderUpscale), 0);
+            Debug.Log("Updated RenderTexture now the size is " + tmp_.width + " by " + tmp_.height);
+            renderTextureSize = tmp_.width * tmp_.height;
+        }
+        currentScreenSize = Screen.width * Screen.height * RenderUpscale;
+
+
         Graphics.SetRenderTarget(tmp_);
         matProjection_.SetPass(0);
         matProjection_.SetMatrix("_WorldToCam", local_);

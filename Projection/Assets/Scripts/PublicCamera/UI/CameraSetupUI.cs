@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using System.Globalization;
+using System.Text.RegularExpressions;
 public class CameraSetupUI : MonoBehaviour
 {
     [SerializeField] private InputField IFScreenHeight;
@@ -22,11 +23,11 @@ public class CameraSetupUI : MonoBehaviour
     {
         Hide();
 
-        IFScreenHeight.characterValidation = InputField.CharacterValidation.Decimal;
-
-        IFViewerOffsetX.characterValidation = InputField.CharacterValidation.Decimal;
-        IFViewerOffsetY.characterValidation = InputField.CharacterValidation.Decimal;
-        IFViewerOffsetZ.characterValidation = InputField.CharacterValidation.Decimal;
+        //IFScreenHeight.characterValidation = InputField.CharacterValidation.Decimal;
+        //
+        //IFViewerOffsetX.characterValidation = InputField.CharacterValidation.Decimal;
+        //IFViewerOffsetY.characterValidation = InputField.CharacterValidation.Decimal;
+        //IFViewerOffsetZ.characterValidation = InputField.CharacterValidation.Decimal;
     }
 
     public void Show()
@@ -48,32 +49,77 @@ public class CameraSetupUI : MonoBehaviour
     }
     public void SetScreenHeight()
     {
-        screenHeight = float.Parse(IFScreenHeight.text);
-        UpdateCameraPosition();
+        if (!string.IsNullOrWhiteSpace(IFScreenHeight.text))
+        {
+            screenHeight = SanetizeInput(IFScreenHeight.text);
+            IFScreenHeight.text = screenHeight.ToString();
+
+            UpdateCameraPosition();
+        }
     }
     public void SetViwerXOffset()
     {
-        cameraPosition.x = float.Parse(IFViewerOffsetX.text);
-        UpdateCameraPosition();
+        if (!string.IsNullOrWhiteSpace(IFViewerOffsetX.text))
+        {
+            cameraPosition.x = SanetizeInput(IFViewerOffsetX.text);
+            IFViewerOffsetX.text = cameraPosition.x.ToString();
+
+            UpdateCameraPosition();
+        }
+        
     }
 
     public void SetViwerYOffset()
     {
-        cameraPosition.y = float.Parse(IFViewerOffsetY.text) ;
-        UpdateCameraPosition();
+        if (!string.IsNullOrWhiteSpace(IFViewerOffsetY.text))
+        {
+            cameraPosition.y = SanetizeInput(IFViewerOffsetY.text);
+            IFViewerOffsetY.text = cameraPosition.y.ToString();
+
+            UpdateCameraPosition();
+        }
     }
     public void SetViwerZOffset()
     {
-        cameraPosition.z = -float.Parse(IFViewerOffsetZ.text);
-        UpdateCameraPosition();
+        if (!string.IsNullOrWhiteSpace(IFViewerOffsetX.text))
+        {
+            // Invert z to make more sense to the user (since camera is in front of the screen, its z coordinate are negative)
+            cameraPosition.z = -SanetizeInput(IFViewerOffsetZ.text);
+            IFViewerOffsetZ.text = (-cameraPosition.z).ToString();
+
+            UpdateCameraPosition();
+        }
     }
 
     private void UpdateCameraPosition()
     {
-        proportion = virtualScreenHeight / screenHeight;
+        if (screenHeight != 0)
+        {
+            proportion = virtualScreenHeight / screenHeight;
+
+            publicCamera.position = (cameraPosition * proportion);
+        }
+        else
+        {
+            Debug.Log("Invalid Screen Height");
+        }
         
-        publicCamera.position = (cameraPosition * proportion);
     }
 
-    
+    // Clean string input and output float
+    private float SanetizeInput(string str)
+    {
+        // Remove all non float usefull character
+        str = Regex.Replace(str, "[^0-9,.+-]+", "");
+
+        // Replace , by . to perform parse
+        str = Regex.Replace(str, "[,]+", ".");
+        // Check str to not parse null string
+        
+        float result;
+        float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+        //float.Parse(str, NumberStyles.Any, CultureInfo.InvariantCulture);
+        return result;
+        
+    }
 }
