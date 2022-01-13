@@ -39,17 +39,13 @@ public class CameraSetupUI : MonoBehaviour
     {
         gameObject.SetActive(!gameObject.activeSelf);
     }
-    public void Test(string UwU)
-    {
-        Debug.Log("Test at " + Time.time);
-    }
+    
     public void SetScreenHeight()
     {
         if (!string.IsNullOrWhiteSpace(IFScreenHeight.text))
         {
             screenHeight = SanetizeInput(IFScreenHeight.text);
-            IFScreenHeight.text = screenHeight.ToString();
-
+            IFScreenHeight.text = distanceDisplay(screenHeight);
             UpdateCameraPosition();
         }
     }
@@ -58,7 +54,7 @@ public class CameraSetupUI : MonoBehaviour
         if (!string.IsNullOrWhiteSpace(IFViewerOffsetX.text))
         {
             cameraPosition.x = SanetizeInput(IFViewerOffsetX.text);
-            IFViewerOffsetX.text = cameraPosition.x.ToString();
+            IFViewerOffsetX.text = distanceDisplay(cameraPosition.x);
 
             UpdateCameraPosition();
         }
@@ -70,7 +66,7 @@ public class CameraSetupUI : MonoBehaviour
         if (!string.IsNullOrWhiteSpace(IFViewerOffsetY.text))
         {
             cameraPosition.y = SanetizeInput(IFViewerOffsetY.text);
-            IFViewerOffsetY.text = cameraPosition.y.ToString();
+            IFViewerOffsetY.text = distanceDisplay(cameraPosition.y);
 
             UpdateCameraPosition();
         }
@@ -81,7 +77,7 @@ public class CameraSetupUI : MonoBehaviour
         {
             // Invert z to make more sense to the user (since camera is in front of the screen, its z coordinate are negative)
             cameraPosition.z = -SanetizeInput(IFViewerOffsetZ.text);
-            IFViewerOffsetZ.text = (-cameraPosition.z).ToString();
+            IFViewerOffsetZ.text = distanceDisplay(-cameraPosition.z);
 
             UpdateCameraPosition();
         }
@@ -114,8 +110,17 @@ public class CameraSetupUI : MonoBehaviour
         
         float result;
         float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
-        
+        // Convert CM in M
+        result /= 100;
+
         return result;
         
+    }
+    private string distanceDisplay(float distance)
+    {
+        distance *= 100;
+        string text = distance.ToString("F1");
+        text += " cm";
+        return text;
     }
 }
