@@ -15,14 +15,7 @@ public class ImportManager : MonoBehaviour
         StartCoroutine(ShowLoadDialog());
     }
 
-    private void ClearHolograms()
-    {
-        foreach (Transform item in holograms)
-        {
-            Destroy(item.gameObject);
-        }
-    }
-
+    
     IEnumerator ShowLoadDialog()
     {
         
@@ -51,42 +44,57 @@ public class ImportManager : MonoBehaviour
             string destinationPath = Path.Combine(Application.persistentDataPath, FileBrowserHelpers.GetFilename(FileBrowser.Result[0]));
             FileBrowserHelpers.CopyFile(FileBrowser.Result[0], destinationPath);
 
-            ClearHolograms();
 
-            StartCoroutine(LoadBundleFromFileSystem(destinationPath));
+            ClearChilds(); // Remove all previously loaded objects
+
+            StartCoroutine(LoadBundleFromFilePath(destinationPath));
         }
     }
 
-    private void Armagedon(Transform obj, int currentRecursion)
+    private void ClearChilds()
     {
-        int MaxRecurtion = 100;
-        if (currentRecursion < MaxRecurtion)
+        foreach (Transform item in holograms)
         {
-            foreach (Transform item in obj)
-            {
-                Armagedon(item, currentRecursion++);
-            }
-            else
-            {
-                Debug.LogWarning("Armagedon Recurtion level greater than " + MaxRecurtion);
-            }
+            Destroy(item.gameObject);
         }
+    }
+
+    IEnumerator LoadBundleFromFilePath(string filePath)
+    {
         
 
-    }
-    IEnumerator LoadBundleFromFileSystem(string filePath)
-    {
+        AssetBundle.UnloadAllAssetBundles(true); // Clear all asset bundles to avoid duplication errors
 
 
-        //Load "animals" AssetBundle
+
         var assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
         yield return assetBundleCreateRequest;
 
         AssetBundle bundle = assetBundleCreateRequest.assetBundle;
 
-
+        // Get the first object in the asset bundle
         string rootAssetPath = bundle.GetAllAssetNames()[0];
         
+        // Load into scene
         GameObject obj = Instantiate(bundle.LoadAsset(rootAssetPath) as GameObject, holograms);
     }
 }
+// Recursive destruction
+//private void Armagedon(Transform obj, int currentRecursion)
+//{
+//    int MaxRecurtion = 100;
+//    if (currentRecursion < MaxRecurtion)
+//    {
+//        foreach (Transform item in obj)
+//        {
+//            Armagedon(item, currentRecursion + 1);
+//        }
+//
+//    }
+//    else
+//    {
+//        Debug.LogWarning("Armagedon Recurtion level greater than " + MaxRecurtion);
+//    }
+//
+//
+//}

@@ -18,6 +18,11 @@ public class CameraSetupUI : MonoBehaviour
     private Vector3 cameraPosition = new Vector3(0,0.5f,-1.5f);
     private float screenHeight = 1;
     private float proportion = 1;
+
+
+
+
+
     // Start is called before the first frame update
     void Awake()
     {
