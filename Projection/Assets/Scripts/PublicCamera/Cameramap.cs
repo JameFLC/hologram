@@ -2,10 +2,10 @@
 
 public class Cameramap : MonoBehaviour
 {
-    [SerializeField] Mesh mesh;
-    [SerializeField] Shader proj;
-    [SerializeField] GameObject VirtualScreen;
-    [SerializeField] float RenderUpscale = 1;
+    [SerializeField] private Mesh mesh;
+    [SerializeField] private Shader proj;
+    [SerializeField] private GameObject VirtualScreen;
+    public float RenderScale = 1;
 
 
     #region private properties
@@ -45,12 +45,12 @@ public class Cameramap : MonoBehaviour
         // TODO : Buggy when window size change
         if (tmp_ == null || renderTextureSize != currentScreenSize)
         {
-            tmp_ = new RenderTexture((int)(Screen.width * RenderUpscale), (int)(Screen.height * RenderUpscale), 0);
+            tmp_ = new RenderTexture((int)(Screen.width * RenderScale), (int)(Screen.height * RenderScale), 0);
             Debug.Log("Updated RenderTexture now the size is " + tmp_.width + " by " + tmp_.height);
             renderTextureSize = tmp_.width * tmp_.height;
         }
-        currentScreenSize = Screen.width * Screen.height * RenderUpscale;
-
+        currentScreenSize = (int)(Screen.width * RenderScale) * (int)(Screen.height * RenderScale);
+        
 
         Graphics.SetRenderTarget(tmp_);
         matProjection_.SetPass(0);

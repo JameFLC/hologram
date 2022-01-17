@@ -11,7 +11,6 @@ public class ImportManager : MonoBehaviour
 
     public void ImportScene()
     {
-       
         StartCoroutine(ShowLoadDialog());
     }
 
