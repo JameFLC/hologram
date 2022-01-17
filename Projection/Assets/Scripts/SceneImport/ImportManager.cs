@@ -11,7 +11,6 @@ public class ImportManager : MonoBehaviour
 
     public void ImportScene()
     {
-       
         StartCoroutine(ShowLoadDialog());
     }
 
@@ -66,12 +65,12 @@ public class ImportManager : MonoBehaviour
             {
                 Armagedon(item, currentRecursion++);
             }
-            else
-            {
-                Debug.LogWarning("Armagedon Recurtion level greater than " + MaxRecurtion);
-            }
+            
         }
-        
+        else
+        {
+            Debug.LogWarning("Armagedon Recurtion level greater than " + MaxRecurtion);
+        }
 
     }
     IEnumerator LoadBundleFromFileSystem(string filePath)
