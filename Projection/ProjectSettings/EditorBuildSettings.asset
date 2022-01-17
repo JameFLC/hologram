@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Projection.unity
+    guid: 54f20435d8977bd40b7f7af6bc2c5aaa
   m_configObjects: {}
