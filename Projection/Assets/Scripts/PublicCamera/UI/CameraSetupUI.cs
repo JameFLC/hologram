@@ -195,7 +195,7 @@ public class CameraSetupUI : MonoBehaviour
     private string distanceDisplay(float distance)
     {
         distance *= 100;
-        string text = distance.ToString("F1");
+        string text = distance.ToString();
         text += " cm";
         return text;
     }
