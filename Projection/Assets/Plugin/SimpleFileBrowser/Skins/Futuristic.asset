@@ -130,6 +130,8 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 3b2a773e413d3e84f8c7c757734af584, type: 3}
   - extension: .exe
     icon: {fileID: 21300000, guid: c1e1f7ef76f59f54bbde5162f2709794, type: 3}
+  - extension: .holo
+    icon: {fileID: 21300000, guid: d3560c0f1399c8142a7ded4831551002, type: 3}
   m_fileMultiSelectionToggleOffIcon: {fileID: 21300000, guid: d6beaeac8de2af749a48581db778df3e, type: 3}
   m_fileMultiSelectionToggleOnIcon: {fileID: 21300000, guid: 30a2566f94f937b4998542121050e68b, type: 3}
   m_contextMenuBackgroundColor: {r: 0.11372549, g: 0.11372549, b: 0.11372549, a: 1}
