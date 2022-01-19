@@ -12,7 +12,7 @@ public class CameraPositionManager : MonoBehaviour
     void Awake()
     {
         float proportion = virtualScreenHeight / realScreenHeight;
-        Debug.Log(proportion);
+
         Vector3 virtualViewerPosition = viewerPosition * proportion;
         transform.position = virtualViewerPosition;
     }

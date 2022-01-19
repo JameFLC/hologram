@@ -1,12 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using SimpleFileBrowser;
 public class ImportManager : MonoBehaviour
 {
     [SerializeField] private Transform holograms;
-
+    private string hologramFilePath;
 
 
     public void ImportScene()
@@ -40,13 +39,14 @@ public class ImportManager : MonoBehaviour
             byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(FileBrowser.Result[0]);
 
             // Or, copy the first file to persistentDataPath
-            string destinationPath = Path.Combine(Application.persistentDataPath, FileBrowserHelpers.GetFilename(FileBrowser.Result[0]));
-            FileBrowserHelpers.CopyFile(FileBrowser.Result[0], destinationPath);
+            hologramFilePath = Path.Combine(Application.persistentDataPath, FileBrowserHelpers.GetFilename(FileBrowser.Result[0]));
+            FileBrowserHelpers.CopyFile(FileBrowser.Result[0], hologramFilePath);
 
 
-            ClearChilds(); // Remove all previously loaded objects
+            Debug.Log("Hologram File Path : " + hologramFilePath);
 
-            StartCoroutine(LoadBundleFromFilePath(destinationPath));
+
+            LoadHologram(hologramFilePath);
         }
     }
 
@@ -58,6 +58,20 @@ public class ImportManager : MonoBehaviour
         }
     }
 
+    public string GetHologramPath()
+    {
+        Debug.Log("Hologram File Path : " + hologramFilePath);
+        return hologramFilePath;
+    }
+    
+    public void LoadHologram(string Filepath)
+    {
+        ClearChilds(); // Remove all previously loaded objects
+        hologramFilePath = Filepath;
+        StartCoroutine(LoadBundleFromFilePath(hologramFilePath));
+        Debug.Log("After load Hologram path : " + hologramFilePath);
+    }
+
     IEnumerator LoadBundleFromFilePath(string filePath)
     {
         
@@ -67,7 +81,9 @@ public class ImportManager : MonoBehaviour
 
 
         var assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
+        Debug.Log("load bundle filepath : " + filePath);
         yield return assetBundleCreateRequest;
+
 
         AssetBundle bundle = assetBundleCreateRequest.assetBundle;
 
@@ -78,22 +94,3 @@ public class ImportManager : MonoBehaviour
         GameObject obj = Instantiate(bundle.LoadAsset(rootAssetPath) as GameObject, holograms);
     }
 }
-// Recursive destruction
-//private void Armagedon(Transform obj, int currentRecursion)
-//{
-//    int MaxRecurtion = 100;
-//    if (currentRecursion < MaxRecurtion)
-//    {
-//        foreach (Transform item in obj)
-//        {
-//            Armagedon(item, currentRecursion + 1);
-//        }
-//
-//    }
-//    else
-//    {
-//        Debug.LogWarning("Armagedon Recurtion level greater than " + MaxRecurtion);
-//    }
-//
-//
-//}

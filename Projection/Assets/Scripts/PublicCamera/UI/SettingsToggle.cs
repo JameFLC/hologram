@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SettingsToggle : MonoBehaviour
 {
-    [SerializeField] CameraSetupUI setupScript;
+    [SerializeField] SetupUI setupScript;
 
     public void toggleSettings()
     {
