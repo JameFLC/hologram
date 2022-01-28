@@ -396,7 +396,7 @@ namespace xsens
             origPos = target;
 
             //create an MvnActor 
-            GameObject obj = (GameObject)Instantiate(Resources.Load("MvnActor"));
+            GameObject obj = (GameObject)Instantiate(Resources.Load("MvnActor"),target.transform);
             obj.transform.parent = target.gameObject.transform;
             mvnActor = obj.transform;
             if (mvnActor == null)
