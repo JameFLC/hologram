@@ -35,7 +35,7 @@ public class MocapManager : MonoBehaviour
             Debug.Log("Object " + target + " as " + avatar);
             if (avatar.isHuman)
             {
-                GameObject mocap = Instantiate(moCapController, target.transform);
+                GameObject mocap = Instantiate(moCapController, target.transform.position,transform.rotation);
                 Debug.Log("Target " + target + " is controlled by " + mocap);
                 xsens.XsLiveAnimator animator = mocap.GetComponent<xsens.XsLiveAnimator>();
                 Debug.Log(animator);
