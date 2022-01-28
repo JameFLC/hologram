@@ -5,6 +5,7 @@ using SimpleFileBrowser;
 public class ImportManager : MonoBehaviour
 {
     [SerializeField] private Transform holograms;
+    [SerializeField] MocapManager moCapManager;
     private string hologramFilePath;
 
 
@@ -92,5 +93,12 @@ public class ImportManager : MonoBehaviour
         
         // Load into scene
         GameObject obj = Instantiate(bundle.LoadAsset(rootAssetPath) as GameObject, holograms);
+
+
+        if (true)
+        {
+            moCapManager.CheckForMoCap(obj);
+        }
     }
+    
 }

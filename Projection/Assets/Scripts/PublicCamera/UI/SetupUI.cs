@@ -22,6 +22,7 @@ public class SetupUI : MonoBehaviour
     [SerializeField] Transform hologramOrigin;
     [SerializeField] Cameramap cameramap;
     [SerializeField] ImportManager importManager;
+    [SerializeField] MocapManager moCapManager;
 
 
     private Vector3 cameraPosition = new Vector3(0,0.5f,-1.5f);
@@ -322,12 +323,8 @@ public class SetupUI : MonoBehaviour
         }
     }
     
-    private void SetupMocap()
-    {
-
-    }
-
-
+   
+    
 
 
     // Clean string input and output float
