@@ -464,7 +464,7 @@ namespace xsens
                 }
 
                 //face model to the right direction	
-                target.transform.rotation = transform.rotation;
+                target.transform.rotation = target.transform.rotation;
 
                 isInited = true;
             }
@@ -483,8 +483,8 @@ namespace xsens
         /// </returns>
         public bool setupMvnActor()
         {
-            mvnActor.rotation = transform.rotation;
-            mvnActor.position = transform.position;
+            mvnActor.rotation = target.transform.rotation;
+            mvnActor.position = target.transform.position;
 
             currentPose[(int)XsBodyAnimationSegment.Pelvis] = mvnActor.Find("Pelvis");
             currentPose[(int)XsBodyAnimationSegment.L5] = mvnActor.Find("Pelvis/L5");
