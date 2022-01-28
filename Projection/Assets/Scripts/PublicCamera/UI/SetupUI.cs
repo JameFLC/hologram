@@ -36,6 +36,8 @@ public class SetupUI : MonoBehaviour
     private float proportion = 1;
     [HideInInspector]
     public bool isArtNetEnabled = false;
+    [HideInInspector]
+    public bool isMoCapEnabled = false;
 
 
 
@@ -77,7 +79,11 @@ public class SetupUI : MonoBehaviour
         {
             isArtNetEnabled = !isArtNetEnabled;
         }
-
+        if (Input.GetButtonDown("ToggleMocap"))
+        {
+            isMoCapEnabled = !isMoCapEnabled;
+            Debug.Log("Mocape enabled = " + isMoCapEnabled);
+        }
     }
 
     public void Show()
@@ -316,6 +322,7 @@ public class SetupUI : MonoBehaviour
         }
     }
     
+
 
 
 
