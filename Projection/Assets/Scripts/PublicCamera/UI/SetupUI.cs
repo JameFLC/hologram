@@ -322,7 +322,10 @@ public class SetupUI : MonoBehaviour
         }
     }
     
+    private void SetupMocap()
+    {
 
+    }
 
 
 
