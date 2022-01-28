@@ -377,7 +377,8 @@ namespace xsens
         /// <summary>
         /// Wake this instance and initialize the live objects.
         /// </summary>
-        /// 
+
+
         public void Setup(XsStreamReader actor, Transform newTarget)
         {
             mvnActors = actor;
@@ -393,10 +394,10 @@ namespace xsens
             //save start positions
             target = newTarget;
             origPos = target;
-            Debug.Log(this + " object begin setup");
+
             //create an MvnActor 
             GameObject obj = (GameObject)Instantiate(Resources.Load("MvnActor"));
-            obj.transform.parent = newTarget;
+            obj.transform.parent = target.gameObject.transform;
             mvnActor = obj.transform;
             if (mvnActor == null)
             {
@@ -448,7 +449,7 @@ namespace xsens
 
                 //add an empty object, which we can use for missing segments
                 missingSegments = new GameObject("MissingSegments");
-                missingSegments.transform.parent = target;
+                missingSegments.transform.parent = target.gameObject.transform;
 
 
                 //setup the animation and the model as well
@@ -756,8 +757,8 @@ namespace xsens
                         //used bones
                         Transform tmpTransf = animator.GetBoneTransform(boneID);
 
-                        Vector3 tempPos = transform.position;
-                        Quaternion tempRot = transform.rotation;
+                        Vector3 tempPos = target.transform.position;
+                        Quaternion tempRot = target.transform.rotation;
 
                         transform.position = Vector3.zero;
                         transform.rotation = Quaternion.identity;
@@ -866,9 +867,9 @@ namespace xsens
             CheckProps();
 
             //Store the parent transform so that we can apply data from MVN assuming our character is in the center of the world facing the forward vector
-            Vector3 storedPos = transform.position;
-            Vector3 storedScale = transform.localScale;
-            Quaternion storedRot = transform.rotation;
+            Vector3 storedPos = target.transform.position;
+            Vector3 storedScale = target.transform.localScale;
+            Quaternion storedRot = target.transform.rotation;
             transform.position = Vector3.zero;
             transform.rotation = Quaternion.identity;
 
