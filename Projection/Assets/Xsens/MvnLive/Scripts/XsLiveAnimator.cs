@@ -650,8 +650,8 @@ namespace xsens
             }
 
             //face the input model same as our animation
-            model.rotation = transform.rotation;
-            model.position = transform.position;
+            model.rotation = target.transform.rotation;
+            model.position = target.transform.position;
 
             //go through the model's body segments and store values
             for (int i = 0; i < XsMvnPose.MvnBodySegmentCount; i++)
