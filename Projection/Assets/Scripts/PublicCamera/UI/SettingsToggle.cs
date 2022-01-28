@@ -8,6 +8,6 @@ public class SettingsToggle : MonoBehaviour
 
     public void toggleSettings()
     {
-        setupScript.Toggle();
+        setupScript.ToggleUI();
     }
 }

@@ -34,7 +34,8 @@ public class SetupUI : MonoBehaviour
     private bool isUIVisible = false;
     private float screenHeight = 1;
     private float proportion = 1;
-    
+    [HideInInspector]
+    public bool isArtNetEnabled = false;
 
 
 
@@ -51,9 +52,10 @@ public class SetupUI : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Cancel"))
+        // Check to switch ui visbility
+        if (Input.GetButtonDown("Cancel")) 
         {
-            Toggle();
+            ToggleUI();
         }
         if (Input.GetButtonDown("LoadCam"))
         {
@@ -71,6 +73,11 @@ public class SetupUI : MonoBehaviour
         {
             LoadHologramData(2);
         }
+        if (Input.GetButtonDown("ToggleArtNet"))
+        {
+            isArtNetEnabled = !isArtNetEnabled;
+        }
+
     }
 
     public void Show()
@@ -87,7 +94,7 @@ public class SetupUI : MonoBehaviour
         UICanvasGroup.blocksRaycasts = false;
         isUIVisible = false;
     }
-    public void Toggle()
+    public void ToggleUI()
     {
         isUIVisible = !isUIVisible;
         if (isUIVisible)
@@ -104,12 +111,12 @@ public class SetupUI : MonoBehaviour
     {
         if (!string.IsNullOrWhiteSpace(IFScreenHeight.text))
         {
-            screenHeight = SanetizeInput(IFScreenHeight.text) / 100;
-            UpdateScreenHeight();
+            UpdateScreenHeight(SanetizeInput(IFScreenHeight.text) / 100);
         }
     }
-    private void UpdateScreenHeight()
+    public void UpdateScreenHeight(float height)
     {
+        screenHeight = height;
         IFScreenHeight.text = distanceDisplay(screenHeight);
         UpdateCameraPosition();
     }
@@ -119,14 +126,13 @@ public class SetupUI : MonoBehaviour
     {
         if (!string.IsNullOrWhiteSpace(IFViewerOffsetX.text))
         {
-            cameraPosition.x = SanetizeInput(IFViewerOffsetX.text) / 100;
-            UpdateViewerXOffset();
+            UpdateViewerXOffset(SanetizeInput(IFViewerOffsetX.text) / 100);
         }
     }
-    private void UpdateViewerXOffset()
+    public void UpdateViewerXOffset(float posX)
     {
+        cameraPosition.x = posX;
         IFViewerOffsetX.text = distanceDisplay(cameraPosition.x);
-
         UpdateCameraPosition();
     }
 
@@ -136,12 +142,12 @@ public class SetupUI : MonoBehaviour
     {
         if (!string.IsNullOrWhiteSpace(IFViewerOffsetY.text))
         {
-            cameraPosition.y = SanetizeInput(IFViewerOffsetY.text) / 100;
-            UpdateViewerYOffset();
+            UpdateViewerYOffset(SanetizeInput(IFViewerOffsetY.text) / 100);
         }
     }
-    private void UpdateViewerYOffset()
+    public void UpdateViewerYOffset(float posY)
     {
+        cameraPosition.y = posY;
         IFViewerOffsetY.text = distanceDisplay(cameraPosition.y);
 
         UpdateCameraPosition();
@@ -152,23 +158,22 @@ public class SetupUI : MonoBehaviour
         if (!string.IsNullOrWhiteSpace(IFViewerOffsetZ.text))
         {
             // Invert z to make more sense to the user (since camera is in front of the screen, its z coordinate are negative)
-            cameraPosition.z = -SanetizeInput(IFViewerOffsetZ.text) / 100;
-            UpdateViewerZOffset();
+            UpdateViewerZOffset(-SanetizeInput(IFViewerOffsetZ.text) / 100);
         }
     }
 
-    private void UpdateViewerZOffset()
+    public void UpdateViewerZOffset(float posZ)
     {
+        cameraPosition.z = posZ;
         IFViewerOffsetZ.text = distanceDisplay(-cameraPosition.z);
-
         UpdateCameraPosition();
     }
 
-    private void UpdateViewerOffset()
+    private void UpdateViewerOffset(Vector3 viewerOffset)
     {
-        UpdateViewerXOffset();
-        UpdateViewerYOffset();
-        UpdateViewerZOffset();
+        UpdateViewerXOffset(viewerOffset.x);
+        UpdateViewerYOffset(viewerOffset.y);
+        UpdateViewerZOffset(viewerOffset.z);
     }
 
     public void SaveCameraData()
@@ -184,11 +189,9 @@ public class SetupUI : MonoBehaviour
         {
             CameraData camData = SaveManager.LoadCameraData();
             Debug.Log("camData Loaded : screen height = " + camData.screenH + " Cam position = " + camData.cameraPos[0] + " " + camData.cameraPos[1] + " " + " " + camData.cameraPos[2]);
-            screenHeight = camData.screenH;
-            UpdateScreenHeight();
+            UpdateScreenHeight(camData.screenH);
 
-            cameraPosition = new Vector3(camData.cameraPos[0], camData.cameraPos[1], camData.cameraPos[2]);
-            UpdateViewerOffset();
+            UpdateViewerOffset(new Vector3(camData.cameraPos[0], camData.cameraPos[1], camData.cameraPos[2]));
         }
     }
 
@@ -197,12 +200,12 @@ public class SetupUI : MonoBehaviour
 
         if (!string.IsNullOrWhiteSpace(IFHoloScale.text))
         {
-            holoScale = SanetizeInput(IFHoloScale.text);
-            UpdateHoloScale();
+            UpdateHoloScale(SanetizeInput(IFHoloScale.text));
         }
     }
-    private void UpdateHoloScale()
+    public void UpdateHoloScale(float scale)
     {
+        holoScale = scale;
         hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
         IFHoloScale.text = hologramOrigin.localScale.x.ToString();
     }
@@ -211,12 +214,12 @@ public class SetupUI : MonoBehaviour
 
         if (!string.IsNullOrWhiteSpace(IFHoloOffsetX.text))
         {
-            holoOffset.x = SanetizeInput(IFHoloOffsetX.text) / 100;
-            UpdateHoloOffset();
+            UpdateHoloXOffset(SanetizeInput(IFHoloOffsetX.text) / 100);
         }
     }
-    private void UpdateHoloOffset()
+    public void UpdateHoloXOffset(float posX)
     {
+        holoOffset.x = posX;
         IFHoloOffsetX.text = distanceDisplay(holoOffset.x);
 
         hologramOrigin.position = holoOffset;
@@ -227,12 +230,13 @@ public class SetupUI : MonoBehaviour
 
         if (!string.IsNullOrWhiteSpace(IFHoloOffsetY.text))
         {
-            holoOffset.y = SanetizeInput(IFHoloOffsetY.text) / 100;
-            UpdateHoloYOffset();
+            
+            UpdateHoloYOffset(SanetizeInput(IFHoloOffsetY.text) / 100);
         }
     }
-    private void UpdateHoloYOffset()
+    public void UpdateHoloYOffset(float posY)
     {
+        holoOffset.y = posY;
         IFHoloOffsetY.text = distanceDisplay(holoOffset.y);
 
         hologramOrigin.position = holoOffset;
@@ -243,27 +247,34 @@ public class SetupUI : MonoBehaviour
 
         if (!string.IsNullOrWhiteSpace(IFHoloOffsetZ.text))
         {
-            holoOffset.z = -SanetizeInput(IFHoloOffsetZ.text) / 100;
-            UpdateHoloZOffset();
+            
+            UpdateHoloZOffset(-SanetizeInput(IFHoloOffsetZ.text) / 100);
         }
     }
-    private void UpdateHoloZOffset()
+    public void UpdateHoloZOffset(float posZ)
     {
+        holoOffset.z = posZ;
         IFHoloOffsetZ.text = distanceDisplay(-holoOffset.z);
 
         hologramOrigin.position = holoOffset;
     }
-
+    public void UpdateHoloOffset(Vector3 offset)
+    {
+        UpdateHoloXOffset(offset.x);
+        UpdateHoloXOffset(offset.y);
+        UpdateHoloXOffset(offset.z);
+    }
     public void SetYRotation()
     {
         if (!string.IsNullOrWhiteSpace(IFHoloYRot.text))
         {
-            holoYRotation = SanetizeInput(IFHoloYRot.text);
-            UpdateYRotation();
+            
+            UpdateYRotation(SanetizeInput(IFHoloYRot.text));
         }
     }
-    private void UpdateYRotation()
+    public void UpdateYRotation(float rotY)
     {
+        holoYRotation = rotY;
         IFHoloYRot.text = holoYRotation + " °";
 
         hologramOrigin.rotation = Quaternion.Euler(hologramOrigin.rotation.x, holoYRotation, hologramOrigin.rotation.z);
@@ -271,7 +282,7 @@ public class SetupUI : MonoBehaviour
 
 
 
-    private void UpdateCameraPosition()
+    public void UpdateCameraPosition()
     {
         if (screenHeight != 0)
         {
@@ -299,12 +310,9 @@ public class SetupUI : MonoBehaviour
             HoloData holoData = SaveManager.LoadHologramData(saveID);
 
             importManager.LoadHologram(holoData.bundlePath);
-            holoOffset = new Vector3(holoData.holoOffset[0], holoData.holoOffset[1], holoData.holoOffset[2]);
-            holoScale = holoData.scaleFactor;
-            holoYRotation = holoData.YRot;
-            UpdateHoloOffset();
-            UpdateHoloScale();
-            UpdateYRotation();
+            UpdateHoloOffset(new Vector3(holoData.holoOffset[0], holoData.holoOffset[1], holoData.holoOffset[2]));
+            UpdateHoloScale(holoData.scaleFactor);
+            UpdateYRotation(holoData.YRot);
         }
     }
     
