@@ -678,15 +678,15 @@ namespace xsens
                         Vector3 tempPos = transform.position;
                         Quaternion tempRot = transform.rotation;
 
-                        transform.position = Vector3.zero;
-                        transform.rotation = Quaternion.identity;
+                        target.transform.position = Vector3.zero;
+                        target.transform.rotation = Quaternion.identity;
 
                         modelRef[(int)segID] = tmpTransf;
                         modelPosTP[(int)segID] = modelRef[(int)segID].position;
                         modelRotTP[(int)segID] = modelRef[(int)segID].rotation;
 
-                        transform.position = tempPos;
-                        transform.rotation = tempRot;
+                        target.transform.position = tempPos;
+                        target.transform.rotation = tempRot;
                     }
                 }
                 catch (Exception e)
@@ -760,14 +760,14 @@ namespace xsens
                         Vector3 tempPos = target.transform.position;
                         Quaternion tempRot = target.transform.rotation;
 
-                        transform.position = Vector3.zero;
+                        target.transform.position = Vector3.zero;
                         transform.rotation = Quaternion.identity;
 
                         modelRef[(int)segID] = tmpTransf;
                         modelPosTP[(int)segID] = modelRef[(int)segID].position;
                         modelRotTP[(int)segID] = modelRef[(int)segID].rotation;
-                        transform.position = tempPos;
-                        transform.rotation = tempRot;
+                        target.transform.position = tempPos;
+                        target.transform.rotation = tempRot;
                     }
                 }
                 catch (Exception e)
@@ -903,9 +903,9 @@ namespace xsens
             }
 
             //Reset the parent object to its position in the scene
-            transform.position = storedPos;
-            transform.localScale = storedScale;
-            transform.rotation = storedRot;
+            target.transform.position = storedPos;
+            target.transform.localScale = storedScale;
+            target.transform.rotation = storedRot;
 
         }
 
