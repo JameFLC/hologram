@@ -396,7 +396,7 @@ namespace xsens
             origPos = target;
 
             //create an MvnActor 
-            GameObject obj = (GameObject)Instantiate(Resources.Load("MvnActor"),target.transform);
+            GameObject obj = (GameObject)Instantiate(Resources.Load("MvnActor"), target.transform);
             obj.transform.parent = target.gameObject.transform;
             mvnActor = obj.transform;
             if (mvnActor == null)
@@ -484,7 +484,7 @@ namespace xsens
         /// </returns>
         public bool setupMvnActor()
         {
-            mvnActor.rotation = target.transform.localRotation;
+            mvnActor.rotation = target.transform.rotation;
             mvnActor.position = target.transform.position;
 
             currentPose[(int)XsBodyAnimationSegment.Pelvis] = mvnActor.Find("Pelvis");
@@ -651,7 +651,7 @@ namespace xsens
             }
 
             //face the input model same as our animation
-            model.rotation = target.transform.localRotation;
+            model.rotation = target.transform.rotation;
             model.position = target.transform.position;
 
             //go through the model's body segments and store values
@@ -676,7 +676,7 @@ namespace xsens
                         //used bones
                         Transform tmpTransf = animator.GetBoneTransform(boneID);
                         Vector3 tempPos = transform.position;
-                        Quaternion tempRot = transform.localRotation;
+                        Quaternion tempRot = transform.rotation;
 
                         transform.position = Vector3.zero;
                         transform.rotation = Quaternion.identity;
@@ -758,7 +758,7 @@ namespace xsens
                         Transform tmpTransf = animator.GetBoneTransform(boneID);
 
                         Vector3 tempPos = target.transform.position;
-                        Quaternion tempRot = target.transform.localRotation;
+                        Quaternion tempRot = target.transform.rotation;
 
                         transform.position = Vector3.zero;
                         transform.rotation = Quaternion.identity;
@@ -869,7 +869,7 @@ namespace xsens
             //Store the parent transform so that we can apply data from MVN assuming our character is in the center of the world facing the forward vector
             Vector3 storedPos = target.transform.position;
             Vector3 storedScale = target.transform.localScale;
-            Quaternion storedRot = target.transform.localRotation;
+            Quaternion storedRot = target.transform.rotation;
             transform.position = Vector3.zero;
             transform.rotation = Quaternion.identity;
 
@@ -1002,7 +1002,7 @@ namespace xsens
                             break;
                         }
                         Quaternion orientation =
-                            Quaternion.Inverse(model[i].transform.parent.localRotation)
+                            Quaternion.Inverse(model[i].transform.parent.rotation)
                              * orientations[bodySegmentOrder[i]]
                             * modelRotTP[i];
 
@@ -1046,7 +1046,7 @@ namespace xsens
                             model[startingIndex + i].transform.position = model[startingIndex + i].transform.parent.position + (positions[startingIndex + i] - positions[(int)props[i].segment]) * transform.localScale.x;
 
                             Quaternion orientation =
-                                Quaternion.Inverse(model[startingIndex + i].transform.parent.localRotation)
+                                Quaternion.Inverse(model[startingIndex + i].transform.parent.rotation)
                                  * orientations[startingIndex + i]
                                 * modelRotTP[startingIndex + i];
                             model[startingIndex + i].transform.localRotation = orientation;
