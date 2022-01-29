@@ -8,9 +8,10 @@ public class SetupUI : MonoBehaviour
     [SerializeField] private InputField IFViewerOffsetX;
     [SerializeField] private InputField IFViewerOffsetY;
     [SerializeField] private InputField IFViewerOffsetZ;
+    
 
     [SerializeField] private InputField IFRenderScale;
-
+    [SerializeField] private InputField IFXSensPort;
     [SerializeField] private InputField IFHoloScale;
     [SerializeField] private InputField IFHoloOffsetX;
     [SerializeField] private InputField IFHoloOffsetY;
@@ -22,7 +23,7 @@ public class SetupUI : MonoBehaviour
     [SerializeField] Transform hologramOrigin;
     [SerializeField] Cameramap cameramap;
     [SerializeField] ImportManager importManager;
-
+    [SerializeField] xsens.XsStreamReader streamReader;
 
 
     private Vector3 cameraPosition = new Vector3(0,0.5f,-1.5f);
@@ -203,6 +204,17 @@ public class SetupUI : MonoBehaviour
         }
     }
 
+    public void SetXSensPort()
+    {
+        if (!string.IsNullOrWhiteSpace(IFXSensPort.text))
+        {
+            UpdateXSensPort(Mathf.RoundToInt(SanetizeInput(IFXSensPort.text)));
+        }
+    }
+    public void UpdateXSensPort(int port)
+    {
+        streamReader.listenPort = Mathf.Clamp(port,0,9999);
+    }
     public void SetHoloScale()
     {
 
