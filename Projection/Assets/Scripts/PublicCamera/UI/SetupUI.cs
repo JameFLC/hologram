@@ -31,6 +31,7 @@ public class SetupUI : MonoBehaviour
     private Vector3 holoOffset = new Vector3(0,0,0);
     private float holoYRotation = 0;
     private float holoScale = 1;
+    private float oldHoloScale = 1;
     private CanvasGroup UICanvasGroup;
     private bool isUIVisible = false;
     private float screenHeight = 1;
@@ -210,12 +211,48 @@ public class SetupUI : MonoBehaviour
             UpdateHoloScale(SanetizeInput(IFHoloScale.text));
         }
     }
+
+    
+
     public void UpdateHoloScale(float scale)
     {
+        oldHoloScale = holoScale;
         holoScale = scale;
         hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
         IFHoloScale.text = hologramOrigin.localScale.x.ToString();
     }
+    private void UpdateLightWhileScaling()
+    {
+        float lightMultiplier = (1.0f * holoScale) / (oldHoloScale);
+
+        SetupLight(hologramOrigin, 0, lightMultiplier);
+    }
+    public void SetupLight(Transform target, int currentRecursion, float lightMultiplier)
+    {
+        int MaxRecurtion = 200;
+        if (currentRecursion < MaxRecurtion)
+        {
+            foreach (Transform item in target)
+            {
+
+                SetupLight(item, currentRecursion + 1, lightMultiplier);
+
+
+            }
+            Light light = target.GetComponent<Light>();
+
+            if (light == null)
+                return;
+
+            light.intensity *= lightMultiplier;
+
+        }
+        else
+        {
+            Debug.LogWarning("Recurtion level greater than " + MaxRecurtion);
+        }
+    } 
+   
     public void SetHoloXOffset()
     {
 
@@ -364,4 +401,5 @@ public class SetupUI : MonoBehaviour
 
         }
     }
+
 }
