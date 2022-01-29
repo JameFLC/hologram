@@ -216,10 +216,22 @@ public class SetupUI : MonoBehaviour
 
     public void UpdateHoloScale(float scale)
     {
-        oldHoloScale = holoScale;
-        holoScale = scale;
-        hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
-        IFHoloScale.text = hologramOrigin.localScale.x.ToString();
+        if (scale == 0)
+        {
+            oldHoloScale = holoScale;
+            holoScale = 0.001f;
+            hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
+            UpdateLightWhileScaling();
+        }
+        else
+        {
+            oldHoloScale = holoScale;
+            holoScale = scale;
+            hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
+            IFHoloScale.text = hologramOrigin.localScale.x.ToString();
+            UpdateLightWhileScaling();
+        }
+        
     }
     private void UpdateLightWhileScaling()
     {
@@ -246,7 +258,8 @@ public class SetupUI : MonoBehaviour
             if (light == null)
                 return;
 
-            light.intensity *= lightMultiplier;
+            Debug.Log("Multiplied light values of " + target + " to " + lightMultiplier);
+            //light.intensity *= lightMultiplier;
             light.range *= lightMultiplier;
         }
         else
