@@ -227,6 +227,8 @@ public class SetupUI : MonoBehaviour
 
         SetupLight(hologramOrigin, 0, lightMultiplier);
     }
+
+    // Find all light in hologram and change all intensities and ranges to match hologram scale
     public void SetupLight(Transform target, int currentRecursion, float lightMultiplier)
     {
         int MaxRecurtion = 200;
@@ -245,7 +247,7 @@ public class SetupUI : MonoBehaviour
                 return;
 
             light.intensity *= lightMultiplier;
-
+            light.range *= lightMultiplier;
         }
         else
         {
