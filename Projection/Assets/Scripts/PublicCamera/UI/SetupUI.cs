@@ -21,7 +21,7 @@ public class SetupUI : MonoBehaviour
     [SerializeField] float virtualScreenHeight = 10;
     [SerializeField] Transform publicCamera;
     [SerializeField] Transform hologramOrigin;
-    [SerializeField] Transform hologramSetupOrigin;
+    //[SerializeField] Transform hologramSetupOrigin;
     [SerializeField] Cameramap cameramap;
     [SerializeField] ImportManager importManager;
     [SerializeField] xsens.XsStreamReader streamReader;
@@ -347,10 +347,10 @@ public class SetupUI : MonoBehaviour
     public void UpdateYRotation(float rotY)
     {
         holoYRotation = rotY;
-        IFHoloYRot.text = holoYRotation + " �";
+        IFHoloYRot.text = holoYRotation + " °";
 
-        //hologramOrigin.rotation = Quaternion.Euler(hologramOrigin.rotation.x, holoYRotation, hologramOrigin.rotation.z);
-        hologramSetupOrigin.rotation = Quaternion.Euler(0, -holoYRotation, 0);
+        hologramOrigin.rotation = Quaternion.Euler(hologramOrigin.rotation.x, holoYRotation, hologramOrigin.rotation.z);
+        //hologramSetupOrigin.rotation = Quaternion.Euler(0, -holoYRotation, 0);
     }
 
 
