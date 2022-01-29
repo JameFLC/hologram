@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -8,7 +8,7 @@ public class SetupUI : MonoBehaviour
     [SerializeField] private InputField IFViewerOffsetX;
     [SerializeField] private InputField IFViewerOffsetY;
     [SerializeField] private InputField IFViewerOffsetZ;
-    
+
 
     [SerializeField] private InputField IFRenderScale;
     [SerializeField] private InputField IFXSensPort;
@@ -21,15 +21,16 @@ public class SetupUI : MonoBehaviour
     [SerializeField] float virtualScreenHeight = 10;
     [SerializeField] Transform publicCamera;
     [SerializeField] Transform hologramOrigin;
+    [SerializeField] Transform hologramSetupOrigin;
     [SerializeField] Cameramap cameramap;
     [SerializeField] ImportManager importManager;
     [SerializeField] xsens.XsStreamReader streamReader;
 
 
-    private Vector3 cameraPosition = new Vector3(0,0.5f,-1.5f);
-    
-    
-    private Vector3 holoOffset = new Vector3(0,0,0);
+    private Vector3 cameraPosition = new Vector3(0, 0.5f, -1.5f);
+
+
+    private Vector3 holoOffset = new Vector3(0, 0, 0);
     private float holoYRotation = 0;
     private float holoScale = 1;
     private float oldHoloScale = 1;
@@ -58,7 +59,7 @@ public class SetupUI : MonoBehaviour
     private void Update()
     {
         // Check to switch ui visbility
-        if (Input.GetButtonDown("Cancel")) 
+        if (Input.GetButtonDown("Cancel"))
         {
             ToggleUI();
         }
@@ -115,7 +116,7 @@ public class SetupUI : MonoBehaviour
             Hide();
         }
     }
-    
+
     public void SetScreenHeight()
     {
         if (!string.IsNullOrWhiteSpace(IFScreenHeight.text))
@@ -213,7 +214,7 @@ public class SetupUI : MonoBehaviour
     }
     public void UpdateXSensPort(int port)
     {
-        streamReader.listenPort = Mathf.Clamp(port,0,9999);
+        streamReader.listenPort = Mathf.Clamp(port, 0, 9999);
     }
     public void SetHoloScale()
     {
@@ -224,7 +225,7 @@ public class SetupUI : MonoBehaviour
         }
     }
 
-    
+
 
     public void UpdateHoloScale(float scale)
     {
@@ -243,7 +244,7 @@ public class SetupUI : MonoBehaviour
             IFHoloScale.text = hologramOrigin.localScale.x.ToString();
             UpdateLightWhileScaling();
         }
-        
+
     }
     private void UpdateLightWhileScaling()
     {
@@ -278,8 +279,8 @@ public class SetupUI : MonoBehaviour
         {
             Debug.LogWarning("Recurtion level greater than " + MaxRecurtion);
         }
-    } 
-   
+    }
+
     public void SetHoloXOffset()
     {
 
@@ -301,7 +302,7 @@ public class SetupUI : MonoBehaviour
 
         if (!string.IsNullOrWhiteSpace(IFHoloOffsetY.text))
         {
-            
+
             UpdateHoloYOffset(SanetizeInput(IFHoloOffsetY.text) / 100);
         }
     }
@@ -318,7 +319,7 @@ public class SetupUI : MonoBehaviour
 
         if (!string.IsNullOrWhiteSpace(IFHoloOffsetZ.text))
         {
-            
+
             UpdateHoloZOffset(-SanetizeInput(IFHoloOffsetZ.text) / 100);
         }
     }
@@ -339,16 +340,17 @@ public class SetupUI : MonoBehaviour
     {
         if (!string.IsNullOrWhiteSpace(IFHoloYRot.text))
         {
-            
+
             UpdateYRotation(SanetizeInput(IFHoloYRot.text));
         }
     }
     public void UpdateYRotation(float rotY)
     {
         holoYRotation = rotY;
-        IFHoloYRot.text = holoYRotation + " °";
+        IFHoloYRot.text = holoYRotation + " ï¿½";
 
-        hologramOrigin.rotation = Quaternion.Euler(hologramOrigin.rotation.x, holoYRotation, hologramOrigin.rotation.z);
+        //hologramOrigin.rotation = Quaternion.Euler(hologramOrigin.rotation.x, holoYRotation, hologramOrigin.rotation.z);
+        hologramSetupOrigin.rotation = Quaternion.Euler(0, -holoYRotation, 0);
     }
 
 
@@ -359,13 +361,13 @@ public class SetupUI : MonoBehaviour
         {
             proportion = virtualScreenHeight / screenHeight;
 
-            publicCamera.position = (cameraPosition * proportion);
+            publicCamera.localPosition = (cameraPosition * proportion);
         }
         else
         {
             Debug.Log("Invalid Screen Height");
         }
-        
+
     }
 
 
@@ -386,9 +388,9 @@ public class SetupUI : MonoBehaviour
             UpdateYRotation(holoData.YRot);
         }
     }
-    
-   
-    
+
+
+
 
 
     // Clean string input and output float
@@ -400,14 +402,14 @@ public class SetupUI : MonoBehaviour
         // Replace , by . to perform parse
         str = Regex.Replace(str, "[,]+", ".");
         // Check str to not parse null string
-        
+
         float result;
         float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         // Convert CM in M
 
 
         return result;
-        
+
     }
     private string distanceDisplay(float distance)
     {
