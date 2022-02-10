@@ -87,7 +87,8 @@ namespace xsens
         private int segmentCount = 0;               //used to figure out the total segment count provided by the data
         private bool fingerTrackingEnabled;         //toggles setting up the finger transforms 
         private int propDataSize = 0;                  //used to offset the index of incoming data since props sit between body segments and finger segments
-
+        [HideInInspector]
+        public GameObject obj;
 #if TPOSE_FIRST		
         private bool isFirstPose;					//check if the first pose is passed
 #endif		
@@ -377,8 +378,7 @@ namespace xsens
         /// <summary>
         /// Wake this instance and initialize the live objects.
         /// </summary>
-
-
+        /// 
         public void Setup(XsStreamReader actor, Transform newTarget)
         {
             mvnActors = actor;
@@ -394,10 +394,10 @@ namespace xsens
             //save start positions
             target = newTarget;
             origPos = target;
-
+            Debug.Log(this + " object begin setup");
             //create an MvnActor 
-            GameObject obj = (GameObject)Instantiate(Resources.Load("MvnActor"), target.transform);
-            obj.transform.parent = target.gameObject.transform;
+            obj = (GameObject)Instantiate(Resources.Load("MvnActor"));
+            obj.transform.parent = newTarget;
             mvnActor = obj.transform;
             if (mvnActor == null)
             {
@@ -449,7 +449,7 @@ namespace xsens
 
                 //add an empty object, which we can use for missing segments
                 missingSegments = new GameObject("MissingSegments");
-                missingSegments.transform.parent = target.gameObject.transform;
+                missingSegments.transform.parent = target;
 
 
                 //setup the animation and the model as well
@@ -465,7 +465,7 @@ namespace xsens
                 }
 
                 //face model to the right direction	
-                target.transform.rotation = target.transform.rotation;
+                target.transform.rotation = transform.rotation;
 
                 isInited = true;
             }
@@ -484,8 +484,8 @@ namespace xsens
         /// </returns>
         public bool setupMvnActor()
         {
-            mvnActor.rotation = target.transform.rotation;
-            mvnActor.position = target.transform.position;
+            mvnActor.rotation = transform.rotation;
+            mvnActor.position = transform.position;
 
             currentPose[(int)XsBodyAnimationSegment.Pelvis] = mvnActor.Find("Pelvis");
             currentPose[(int)XsBodyAnimationSegment.L5] = mvnActor.Find("Pelvis/L5");
@@ -651,8 +651,8 @@ namespace xsens
             }
 
             //face the input model same as our animation
-            model.rotation = target.transform.rotation;
-            model.position = target.transform.position;
+            model.rotation = transform.rotation;
+            model.position = transform.position;
 
             //go through the model's body segments and store values
             for (int i = 0; i < XsMvnPose.MvnBodySegmentCount; i++)
@@ -678,15 +678,15 @@ namespace xsens
                         Vector3 tempPos = transform.position;
                         Quaternion tempRot = transform.rotation;
 
-                        target.transform.position = Vector3.zero;
-                        target.transform.rotation = Quaternion.identity;
+                        transform.position = Vector3.zero;
+                        transform.rotation = Quaternion.identity;
 
                         modelRef[(int)segID] = tmpTransf;
                         modelPosTP[(int)segID] = modelRef[(int)segID].position;
                         modelRotTP[(int)segID] = modelRef[(int)segID].rotation;
 
-                        target.transform.position = tempPos;
-                        target.transform.rotation = tempRot;
+                        transform.position = tempPos;
+                        transform.rotation = tempRot;
                     }
                 }
                 catch (Exception e)
@@ -757,17 +757,17 @@ namespace xsens
                         //used bones
                         Transform tmpTransf = animator.GetBoneTransform(boneID);
 
-                        Vector3 tempPos = target.transform.position;
-                        Quaternion tempRot = target.transform.rotation;
+                        Vector3 tempPos = transform.position;
+                        Quaternion tempRot = transform.rotation;
 
-                        target.transform.position = Vector3.zero;
+                        transform.position = Vector3.zero;
                         transform.rotation = Quaternion.identity;
 
                         modelRef[(int)segID] = tmpTransf;
                         modelPosTP[(int)segID] = modelRef[(int)segID].position;
                         modelRotTP[(int)segID] = modelRef[(int)segID].rotation;
-                        target.transform.position = tempPos;
-                        target.transform.rotation = tempRot;
+                        transform.position = tempPos;
+                        transform.rotation = tempRot;
                     }
                 }
                 catch (Exception e)
@@ -823,32 +823,7 @@ namespace xsens
         /// <summary>
         /// Checks the props and updates models/segments in runtime
         /// </summary>
-        void CheckProps()
-        {
-            for (int i = 0; i < props.Length; i++)
-            {
-                if (i < propDataSize)
-                {
-                    targetProps[i].gameObject.SetActive(true);
-
-                    if (props[i].type != targetProps[i].currentType)
-                    {
-                        targetProps[i].SwapPropType(props[i].type);
-                    }
-
-                    if (props[i].segment != targetProps[i].currentSegment)
-                    {
-                        currentProps[i].transform.parent = currentPose[(int)props[i].segment];
-                        targetProps[i].gameObject.transform.parent = targetModel[(int)props[i].segment];
-                        targetProps[i].currentSegment = props[i].segment;
-                    }
-                }
-                else
-                {
-                    targetProps[i].gameObject.SetActive(false);
-                }
-            }
-        }
+        
 
         /// <summary>
         ///	Update the body segments in every frame.
@@ -864,12 +839,12 @@ namespace xsens
             if (!isInited)
                 return;
 
-            CheckProps();
+
 
             //Store the parent transform so that we can apply data from MVN assuming our character is in the center of the world facing the forward vector
-            Vector3 storedPos = target.transform.position;
-            Vector3 storedScale = target.transform.localScale;
-            Quaternion storedRot = target.transform.rotation;
+            Vector3 storedPos = transform.position;
+            Vector3 storedScale = transform.localScale;
+            Quaternion storedRot = transform.rotation;
             transform.position = Vector3.zero;
             transform.rotation = Quaternion.identity;
 
@@ -903,9 +878,9 @@ namespace xsens
             }
 
             //Reset the parent object to its position in the scene
-            target.transform.position = storedPos;
-            target.transform.localScale = storedScale;
-            target.transform.rotation = storedRot;
+            transform.position = storedPos;
+            transform.localScale = storedScale;
+            transform.rotation = storedRot;
 
         }
 

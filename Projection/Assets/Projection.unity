@@ -3120,10 +3120,10 @@ MonoBehaviour:
   virtualScreenHeight: 10
   publicCamera: {fileID: 805749524}
   hologramOrigin: {fileID: 845993619}
-  hologramSetupOrigin: {fileID: 1596142787}
   cameramap: {fileID: 805749525}
   importManager: {fileID: 747839465}
-  streamReader: {fileID: 0}
+  streamReader: {fileID: 1932460564}
+  mocapManager: {fileID: 1016654144}
   isArtNetEnabled: 0
   isMoCapEnabled: 0
 --- !u!225 &1016654141

@@ -25,7 +25,7 @@ public class SetupUI : MonoBehaviour
     [SerializeField] Cameramap cameramap;
     [SerializeField] ImportManager importManager;
     [SerializeField] xsens.XsStreamReader streamReader;
-
+    [SerializeField] MocapManager mocapManager;
 
     private Vector3 cameraPosition = new Vector3(0, 0.5f, -1.5f);
 
@@ -245,6 +245,7 @@ public class SetupUI : MonoBehaviour
             UpdateLightWhileScaling();
         }
 
+        mocapManager.ScaleMocap(hologramOrigin, 0, holoScale);
     }
     private void UpdateLightWhileScaling()
     {
