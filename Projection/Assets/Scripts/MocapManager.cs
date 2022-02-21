@@ -35,6 +35,10 @@ public class MocapManager : MonoBehaviour
             {
                 GameObject mocap = Instantiate(moCapController, target.transform.position, transform.rotation);
                 mocap.transform.SetParent(target);
+
+                mocap.transform.localScale = new Vector3(1, 1, 1); // IMPORTANT FOR SOME REASON
+
+
                 Debug.Log("Target " + target + " is controlled by " + mocap);
                 xsens.XsLiveAnimator animator = mocap.GetComponent<xsens.XsLiveAnimator>();
                 Debug.Log(animator);

@@ -234,7 +234,6 @@ public class SetupUI : MonoBehaviour
             oldHoloScale = holoScale;
             holoScale = 0.001f;
             hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
-            UpdateLightWhileScaling();
         }
         else
         {
@@ -242,15 +241,34 @@ public class SetupUI : MonoBehaviour
             holoScale = scale;
             hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
             IFHoloScale.text = hologramOrigin.localScale.x.ToString();
-            UpdateLightWhileScaling();
         }
 
+        UpdateLightWhileScaling();
         mocapManager.ScaleMocap(hologramOrigin, 0, holoScale);
     }
+    public void ImportHoloScale(float scale)
+    {
+        oldHoloScale = 1;
+        if (scale == 0)
+        {
+            holoScale = 0.001f;
+            hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
+        }
+        else
+        {
+            holoScale = scale;
+            hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
+            IFHoloScale.text = hologramOrigin.localScale.x.ToString();
+        }
+
+        UpdateLightWhileScaling();
+        mocapManager.ScaleMocap(hologramOrigin, 0, holoScale);
+    }
+
     private void UpdateLightWhileScaling()
     {
         float lightMultiplier = (1.0f * holoScale) / (oldHoloScale);
-
+        Debug.LogWarning("Ligth power boosted by " + lightMultiplier);
         SetupLight(hologramOrigin, 0, lightMultiplier);
     }
 
@@ -260,11 +278,11 @@ public class SetupUI : MonoBehaviour
         int MaxRecurtion = 200;
         if (currentRecursion < MaxRecurtion)
         {
+
             foreach (Transform item in target)
             {
 
                 SetupLight(item, currentRecursion + 1, lightMultiplier);
-
 
             }
             Light light = target.GetComponent<Light>();
@@ -272,8 +290,8 @@ public class SetupUI : MonoBehaviour
             if (light == null)
                 return;
 
-            Debug.Log("Multiplied light values of " + target + " to " + lightMultiplier);
-            //light.intensity *= lightMultiplier;
+            Debug.LogError("Multiplied light values of " + target + " to " + lightMultiplier);
+            
             light.range *= lightMultiplier;
         }
         else
@@ -351,7 +369,7 @@ public class SetupUI : MonoBehaviour
         IFHoloYRot.text = holoYRotation + " °";
 
         hologramOrigin.rotation = Quaternion.Euler(hologramOrigin.rotation.x, holoYRotation, hologramOrigin.rotation.z);
-        //hologramSetupOrigin.rotation = Quaternion.Euler(0, -holoYRotation, 0);
+
     }
 
 
@@ -374,6 +392,7 @@ public class SetupUI : MonoBehaviour
 
     public void SaveHologramData(int saveID)
     {
+
         SaveManager.SaveHologram(importManager.GetHologramPath(), holoOffset, hologramOrigin.localScale.x, holoYRotation, saveID);
     }
 
@@ -382,11 +401,15 @@ public class SetupUI : MonoBehaviour
         if (SaveManager.isHologramSaved(saveID))
         {
             HoloData holoData = SaveManager.LoadHologramData(saveID);
-
             importManager.LoadHologram(holoData.bundlePath);
+            
             UpdateHoloOffset(new Vector3(holoData.holoOffset[0], holoData.holoOffset[1], holoData.holoOffset[2]));
-            UpdateHoloScale(holoData.scaleFactor);
+
+
+
             UpdateYRotation(holoData.YRot);
+            ImportHoloScale(holoData.scaleFactor);
+
         }
     }
 

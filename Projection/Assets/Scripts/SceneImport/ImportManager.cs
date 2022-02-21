@@ -6,11 +6,13 @@ public class ImportManager : MonoBehaviour
 {
     [SerializeField] private Transform holograms;
     [SerializeField] MocapManager moCapManager;
+    [SerializeField] SetupUI setupUI;
     private string hologramFilePath;
 
 
     public void ImportScene()
     {
+
         StartCoroutine(ShowLoadDialog());
     }
 
@@ -68,6 +70,7 @@ public class ImportManager : MonoBehaviour
     public void LoadHologram(string Filepath)
     {
         ClearChilds(); // Remove all previously loaded objects
+        
         hologramFilePath = Filepath;
         StartCoroutine(LoadBundleFromFilePath(hologramFilePath));
         Debug.Log("After load Hologram path : " + hologramFilePath);
@@ -75,7 +78,6 @@ public class ImportManager : MonoBehaviour
 
     IEnumerator LoadBundleFromFilePath(string filePath)
     {
-        
 
         AssetBundle.UnloadAllAssetBundles(true); // Clear all asset bundles to avoid duplication errors
 
@@ -90,7 +92,7 @@ public class ImportManager : MonoBehaviour
 
         // Get the first object in the asset bundle
         string rootAssetPath = bundle.GetAllAssetNames()[0];
-        
+
         // Load into scene
         GameObject obj = Instantiate(bundle.LoadAsset(rootAssetPath) as GameObject, holograms);
 

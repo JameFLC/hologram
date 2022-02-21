@@ -2344,6 +2344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   holograms: {fileID: 845993619}
   moCapManager: {fileID: 1016654144}
+  setupUI: {fileID: 1016654140}
 --- !u!114 &747839466
 MonoBehaviour:
   m_ObjectHideFlags: 0
