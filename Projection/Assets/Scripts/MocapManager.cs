@@ -41,7 +41,7 @@ public class MocapManager : MonoBehaviour
 
                 Debug.Log("Target " + target + " is controlled by " + mocap);
                 xsens.XsLiveAnimator animator = mocap.GetComponent<xsens.XsLiveAnimator>();
-                Debug.Log(animator);
+                
                 animator.Setup(actor, target);
             }
         }

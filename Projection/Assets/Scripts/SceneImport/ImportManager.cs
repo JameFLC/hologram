@@ -6,13 +6,14 @@ public class ImportManager : MonoBehaviour
 {
     [SerializeField] private Transform holograms;
     [SerializeField] MocapManager moCapManager;
+    [SerializeField] LightManager lightManager;
     [SerializeField] SetupUI setupUI;
     private string hologramFilePath;
-
+    private float importScale = 1;
 
     public void ImportScene()
     {
-
+        
         StartCoroutine(ShowLoadDialog());
     }
 
@@ -67,16 +68,18 @@ public class ImportManager : MonoBehaviour
         return hologramFilePath;
     }
     
-    public void LoadHologram(string Filepath)
+    public void LoadHologram(string Filepath, float scale = 1)
     {
+        importScale = scale;
+        setupUI.UpdateHoloScale(scale);
         ClearChilds(); // Remove all previously loaded objects
         
         hologramFilePath = Filepath;
-        StartCoroutine(LoadBundleFromFilePath(hologramFilePath));
+        StartCoroutine(LoadBundleFromFilePath(hologramFilePath, scale));
         Debug.Log("After load Hologram path : " + hologramFilePath);
     }
 
-    IEnumerator LoadBundleFromFilePath(string filePath)
+    IEnumerator LoadBundleFromFilePath(string filePath, float scale = 1)
     {
 
         AssetBundle.UnloadAllAssetBundles(true); // Clear all asset bundles to avoid duplication errors
@@ -101,6 +104,8 @@ public class ImportManager : MonoBehaviour
         {
             moCapManager.CheckForMoCap(obj);
         }
+
+        lightManager.UpdateLightWhileScaling(scale, 1, holograms);
     }
     
 }
