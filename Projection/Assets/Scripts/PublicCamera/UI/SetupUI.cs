@@ -21,12 +21,12 @@ public class SetupUI : MonoBehaviour
     [SerializeField] float virtualScreenHeight = 10;
     [SerializeField] Transform publicCamera;
     [SerializeField] Transform hologramOrigin;
-    [SerializeField] Transform hologramSetupOrigin;
+    //[SerializeField] Transform hologramSetupOrigin;
     [SerializeField] Cameramap cameramap;
     [SerializeField] ImportManager importManager;
     [SerializeField] xsens.XsStreamReader streamReader;
-
-
+    [SerializeField] MocapManager mocapManager;
+    [SerializeField] LightManager lightManager;
     private Vector3 cameraPosition = new Vector3(0, 0.5f, -1.5f);
 
 
@@ -229,12 +229,18 @@ public class SetupUI : MonoBehaviour
 
     public void UpdateHoloScale(float scale)
     {
+        SetNewHoloScale(scale);
+        IFHoloScale.text = scale.ToString();
+        lightManager.UpdateLightWhileScaling(holoScale, oldHoloScale, hologramOrigin);
+    }
+
+    public void SetNewHoloScale(float scale)
+    {
         if (scale == 0)
         {
             oldHoloScale = holoScale;
             holoScale = 0.001f;
             hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
-            UpdateLightWhileScaling();
         }
         else
         {
@@ -242,44 +248,13 @@ public class SetupUI : MonoBehaviour
             holoScale = scale;
             hologramOrigin.localScale = new Vector3(holoScale, holoScale, holoScale);
             IFHoloScale.text = hologramOrigin.localScale.x.ToString();
-            UpdateLightWhileScaling();
         }
+        mocapManager.ScaleMocap(hologramOrigin, 0, holoScale);
 
     }
-    private void UpdateLightWhileScaling()
-    {
-        float lightMultiplier = (1.0f * holoScale) / (oldHoloScale);
 
-        SetupLight(hologramOrigin, 0, lightMultiplier);
-    }
+    
 
-    // Find all light in hologram and change all intensities and ranges to match hologram scale
-    public void SetupLight(Transform target, int currentRecursion, float lightMultiplier)
-    {
-        int MaxRecurtion = 200;
-        if (currentRecursion < MaxRecurtion)
-        {
-            foreach (Transform item in target)
-            {
-
-                SetupLight(item, currentRecursion + 1, lightMultiplier);
-
-
-            }
-            Light light = target.GetComponent<Light>();
-
-            if (light == null)
-                return;
-
-            Debug.Log("Multiplied light values of " + target + " to " + lightMultiplier);
-            //light.intensity *= lightMultiplier;
-            light.range *= lightMultiplier;
-        }
-        else
-        {
-            Debug.LogWarning("Recurtion level greater than " + MaxRecurtion);
-        }
-    }
 
     public void SetHoloXOffset()
     {
@@ -347,10 +322,10 @@ public class SetupUI : MonoBehaviour
     public void UpdateYRotation(float rotY)
     {
         holoYRotation = rotY;
-        IFHoloYRot.text = holoYRotation + " �";
+        IFHoloYRot.text = holoYRotation + " °";
 
-        //hologramOrigin.rotation = Quaternion.Euler(hologramOrigin.rotation.x, holoYRotation, hologramOrigin.rotation.z);
-        hologramSetupOrigin.rotation = Quaternion.Euler(0, -holoYRotation, 0);
+        hologramOrigin.rotation = Quaternion.Euler(hologramOrigin.rotation.x, holoYRotation, hologramOrigin.rotation.z);
+
     }
 
 
@@ -373,19 +348,28 @@ public class SetupUI : MonoBehaviour
 
     public void SaveHologramData(int saveID)
     {
+
         SaveManager.SaveHologram(importManager.GetHologramPath(), holoOffset, hologramOrigin.localScale.x, holoYRotation, saveID);
     }
 
     public void LoadHologramData(int saveID)
     {
+        
         if (SaveManager.isHologramSaved(saveID))
         {
+            SetNewHoloScale(1);
             HoloData holoData = SaveManager.LoadHologramData(saveID);
-
-            importManager.LoadHologram(holoData.bundlePath);
+            importManager.LoadHologram(holoData.bundlePath , holoData.scaleFactor);
+            Debug.LogError("Holoscale before update = " + hologramOrigin.localScale);
             UpdateHoloOffset(new Vector3(holoData.holoOffset[0], holoData.holoOffset[1], holoData.holoOffset[2]));
-            UpdateHoloScale(holoData.scaleFactor);
+
+
+
             UpdateYRotation(holoData.YRot);
+
+            holoScale = 1.0f; 
+            SetNewHoloScale(holoData.scaleFactor);
+            Debug.LogError("Holoscale after update = " + hologramOrigin.localScale);
         }
     }
 
