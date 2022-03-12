@@ -3123,7 +3123,6 @@ MonoBehaviour:
   virtualScreenHeight: 10
   publicCamera: {fileID: 805749524}
   hologramOrigin: {fileID: 845993619}
-  hologramSetupOrigin: {fileID: 1596142787}
   cameramap: {fileID: 805749525}
   importManager: {fileID: 747839465}
   streamReader: {fileID: 1932460564}
@@ -3377,7 +3376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30, y: -20.08163}
+  m_AnchoredPosition: {x: 30, y: -20.081604}
   m_SizeDelta: {x: 280, y: 48}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1178990438
@@ -4217,9 +4216,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Sauvegarder Holorgamme 2
-
-'
+  m_Text: Sauvegarder Holorgamme 2
 --- !u!222 &1504160875
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4298,9 +4295,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Sauvegarder Holorgamme 3
-
-'
+  m_Text: Sauvegarder Holorgamme 3
 --- !u!222 &1527161847
 CanvasRenderer:
   m_ObjectHideFlags: 0
