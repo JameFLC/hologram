@@ -307,9 +307,12 @@ public class SetupUI : MonoBehaviour
     }
     public void UpdateHoloOffset(Vector3 offset)
     {
+        
         UpdateHoloXOffset(offset.x);
-        UpdateHoloXOffset(offset.y);
-        UpdateHoloXOffset(offset.z);
+        UpdateHoloYOffset(offset.y);
+        UpdateHoloZOffset(offset.z);
+
+        Debug.LogWarning("Offset should be proper");
     }
     public void SetYRotation()
     {
@@ -348,7 +351,7 @@ public class SetupUI : MonoBehaviour
 
     public void SaveHologramData(int saveID)
     {
-
+        Debug.Log("Saved holo offset : " + holoOffset);
         SaveManager.SaveHologram(importManager.GetHologramPath(), holoOffset, hologramOrigin.localScale.x, holoYRotation, saveID);
     }
 
@@ -360,9 +363,15 @@ public class SetupUI : MonoBehaviour
             SetNewHoloScale(1);
             HoloData holoData = SaveManager.LoadHologramData(saveID);
             importManager.LoadHologram(holoData.bundlePath , holoData.scaleFactor);
-            Debug.LogError("Holoscale before update = " + hologramOrigin.localScale);
-            UpdateHoloOffset(new Vector3(holoData.holoOffset[0], holoData.holoOffset[1], holoData.holoOffset[2]));
 
+            
+            Vector3 vecoffs = new Vector3(holoData.holoOffset[0], holoData.holoOffset[1], holoData.holoOffset[2]);
+            Debug.Log("Loaded Hologramm Offset [" + holoData.holoOffset[0] + "," + holoData.holoOffset[1] + "," + holoData.holoOffset[2] + "]");
+            
+            Debug.Log("Loaded Hologramm Vector Offset " + vecoffs);
+            UpdateHoloOffset(vecoffs);
+
+            
 
 
             UpdateYRotation(holoData.YRot);

@@ -30,7 +30,7 @@ public class LightManager : MonoBehaviour
             if (light == null)
                 return;
 
-            Debug.LogWarning("Multiplied light values of " + target + " to " + lightMultiplier);
+            
 
             light.range *= lightMultiplier;
         }
