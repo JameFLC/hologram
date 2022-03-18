@@ -11,12 +11,14 @@ public class SetupUI : MonoBehaviour
 
 
     [SerializeField] private InputField IFRenderScale;
-    [SerializeField] private InputField IFXSensPort;
+
     [SerializeField] private InputField IFHoloScale;
     [SerializeField] private InputField IFHoloOffsetX;
     [SerializeField] private InputField IFHoloOffsetY;
     [SerializeField] private InputField IFHoloOffsetZ;
     [SerializeField] private InputField IFHoloYRot;
+    [SerializeField] private InputField IFXSensPort;
+    [SerializeField] private InputField IFUniverse;
 
     [SerializeField] float virtualScreenHeight = 10;
     [SerializeField] Transform publicCamera;
@@ -27,6 +29,7 @@ public class SetupUI : MonoBehaviour
     [SerializeField] xsens.XsStreamReader streamReader;
     [SerializeField] MocapManager mocapManager;
     [SerializeField] LightManager lightManager;
+    [SerializeField] ArtDotNet.ArtNetClient artNetClient;
     private Vector3 cameraPosition = new Vector3(0, 0.5f, -1.5f);
 
 
@@ -38,6 +41,7 @@ public class SetupUI : MonoBehaviour
     private bool isUIVisible = false;
     private float screenHeight = 1;
     private float proportion = 1;
+    private int ArtNetUniverse = 0;
     [HideInInspector]
     public bool isArtNetEnabled = false;
     [HideInInspector]
@@ -205,17 +209,7 @@ public class SetupUI : MonoBehaviour
         }
     }
 
-    public void SetXSensPort()
-    {
-        if (!string.IsNullOrWhiteSpace(IFXSensPort.text))
-        {
-            UpdateXSensPort(Mathf.RoundToInt(SanetizeInput(IFXSensPort.text)));
-        }
-    }
-    public void UpdateXSensPort(int port)
-    {
-        streamReader.listenPort = Mathf.Clamp(port, 0, 9999);
-    }
+   
     public void SetHoloScale()
     {
 
@@ -307,7 +301,6 @@ public class SetupUI : MonoBehaviour
     }
     public void UpdateHoloOffset(Vector3 offset)
     {
-        
         UpdateHoloXOffset(offset.x);
         UpdateHoloYOffset(offset.y);
         UpdateHoloZOffset(offset.z);
@@ -330,6 +323,38 @@ public class SetupUI : MonoBehaviour
         hologramOrigin.rotation = Quaternion.Euler(hologramOrigin.rotation.x, holoYRotation, hologramOrigin.rotation.z);
 
     }
+
+
+    public void SetXSensPort()
+    {
+        if (!string.IsNullOrWhiteSpace(IFXSensPort.text))
+        {
+            UpdateXSensPort(Mathf.RoundToInt(SanetizeInput(IFXSensPort.text)));
+        }
+    }
+    public void UpdateXSensPort(int port)
+    {
+        streamReader.listenPort = Mathf.Clamp(port, 0, 9999);
+    }
+    
+    public void SetArtNetUniverse()
+    {
+        Debug.LogError("AAAAAHHHHHHHHHHH");
+        if (!string.IsNullOrWhiteSpace(IFUniverse.text))
+        {
+            UpdateArtNetUniverse(Mathf.RoundToInt(SanetizeInput(IFUniverse.text)));
+        }
+    }
+
+    public void UpdateArtNetUniverse(int universe)
+    {
+        ArtNetUniverse = universe;
+
+        artNetClient.liscenedUniverse = ArtNetUniverse;
+        Debug.Log("New Universe : " + ArtNetUniverse + " client Universe : " + artNetClient.liscenedUniverse);
+    }
+
+
 
 
 

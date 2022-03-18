@@ -13,6 +13,7 @@ namespace ArtDotNet
 
 
 		public byte[] DMXdata = new byte[512];
+		public int liscenedUniverse = 0;
 		public const int PORT = 6454;
 		public const string NAME = "ArtNetServer";		
 		int universe, net, subnet;
@@ -73,15 +74,26 @@ namespace ArtDotNet
 				universe = packet.RawData[14]%16;
 				net = packet.RawData[15];
 				subnet = packet.RawData[14]/16;
-				// Update DMX Data
-				for( int i = 0; i < 512; i++){
-					DMXdata[i] = packet.RawData[18 + i];
+                // Update DMX Data
+                if (universe == liscenedUniverse)
+                {
+					for (int i = 0; i < 512; i++)
+					{
+						DMXdata[i] = packet.RawData[18 + i];
+					}	
 				}
+				
 				
 				
 
 			}
 		}
-
+		public void ReloadArtNet()
+        {
+			Stop();
+			communicator = new UdpCommunicator();
+			communicator.DataReceived += Communicator_DataReceived;
+			communicator.Start(Address, Port);
+		}
 	}
 }
