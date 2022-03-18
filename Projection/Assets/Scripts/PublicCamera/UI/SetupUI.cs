@@ -339,7 +339,7 @@ public class SetupUI : MonoBehaviour
     
     public void SetArtNetUniverse()
     {
-        Debug.LogError("AAAAAHHHHHHHHHHH");
+
         if (!string.IsNullOrWhiteSpace(IFUniverse.text))
         {
             UpdateArtNetUniverse(Mathf.RoundToInt(SanetizeInput(IFUniverse.text)));

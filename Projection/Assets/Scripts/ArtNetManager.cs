@@ -104,6 +104,7 @@ public class ArtNetManager : MonoBehaviour
             float newRotation = rotationByStep + (-128 + client.DMXdata[firstChannel + 16])*2 + -128 + client.DMXdata[firstChannel + 17];
             if (holoYRotation != newRotation)
             {
+                Debug.Log("Rotation = " + newRotation);
                 holoYRotation = newRotation;
                 setupUI.UpdateYRotation(holoYRotation);
             }
