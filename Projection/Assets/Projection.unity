@@ -1813,7 +1813,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Sauvgarder Cam\xE9ra"
+  m_Text: "Sauvegarder Cam\xE9ra"
 --- !u!222 &499087410
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4203,7 +4203,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Sauvgarder Holorgamme 1
+  m_Text: Sauvegarder Holorgamme 1
 --- !u!222 &1381987864
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4376,7 +4376,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Sauvgarder Holorgamme 2
+  m_Text: Sauvegarder Holorgamme 2
 --- !u!222 &1504160875
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4455,7 +4455,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Sauvgarder Holorgamme 3
+  m_Text: Sauvegarder Holorgamme 3
 --- !u!222 &1527161847
 CanvasRenderer:
   m_ObjectHideFlags: 0
