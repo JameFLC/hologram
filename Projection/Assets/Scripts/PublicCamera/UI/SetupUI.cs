@@ -100,13 +100,16 @@ public class SetupUI : MonoBehaviour
         UICanvasGroup.alpha = 1;
         UICanvasGroup.blocksRaycasts = true;
         isUIVisible = true;
+        Cursor.visible = true;
     }
     public void Hide()
     {
+        Cursor.visible = false;
         UICanvasGroup.interactable = isUIVisible;
         UICanvasGroup.alpha = 0;
         UICanvasGroup.blocksRaycasts = false;
         isUIVisible = false;
+        
     }
     public void ToggleUI()
     {
